@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply text-luxury-dark bg-white;
+    font-feature-settings: 'kern' 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Focus states for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-whatsapp ring-offset-2 ring-offset-white;
+  }
+
+  /* Better link styles */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Better button styles */
+  button {
+    @apply transition-all duration-200;
+  }
+}
+
+@layer components {
+  /* Smooth scrolling container */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Luxury card style */
+  .luxury-card {
+    @apply bg-white rounded-2xl shadow-medium hover:shadow-large transition-all duration-300 border border-gray-100;
+  }
+
+  /* Luxury button style */
+  .luxury-button {
+    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95;
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Text gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-whatsapp to-whatsapp-dark;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-md border border-white/20;
+  }
+
+  /* Hide scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
