@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     description: BRAND_TAGLINE,
     images: [
       {
-        url: '/images/decoration/hero.png',
+        url: '/images/decoration/dekor.jpeg',
         width: 1200,
         height: 630,
         alt: BRAND_NAME,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${BRAND_NAME} | Korunaklı Lüks Villa`,
     description: BRAND_TAGLINE,
-    images: ['/images/decoration/hero.png'],
+    images: ['/images/decoration/dekor.jpeg'],
   },
   robots: {
     index: true,
