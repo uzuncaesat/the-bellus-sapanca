@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     description: BRAND_TAGLINE,
     images: [
       {
-        url: '/images/decoration/WhatsApp Image 2026-01-15 at 22.32.14.jpeg',
+        url: '/images/decoration/hero.png',
         width: 1200,
         height: 630,
         alt: BRAND_NAME,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${BRAND_NAME} | Korunaklı Lüks Villa`,
     description: BRAND_TAGLINE,
-    images: ['/images/decoration/WhatsApp Image 2026-01-15 at 22.32.14.jpeg'],
+    images: ['/images/decoration/hero.png'],
   },
   robots: {
     index: true,

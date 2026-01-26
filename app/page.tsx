@@ -20,7 +20,7 @@ export default function HomePage() {
   const features = villas[0]?.features || [];
 
   // Hero için dekorasyon görseli (ilk görseli kullan)
-  const heroImage = '/images/decoration/WhatsApp Image 2026-01-15 at 22.32.14.jpeg';
+  const heroImage = '/images/decoration/hero.png';
 
   return (
     <>
@@ -75,7 +75,7 @@ export default function HomePage() {
                 className="relative h-[400px] md:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl group"
               >
                 <Image
-                  src="/images/decoration/WhatsApp Image 2026-01-15 at 22.32.14.jpeg"
+                  src="/images/decoration/hero.png"
                   alt="The Bellus Sapanca Villa - İç Mekan Dekorasyonu"
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-700"
