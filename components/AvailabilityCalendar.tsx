@@ -143,7 +143,7 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 max-w-sm">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 max-w-lg">
       {loading ? (
         <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
           <Loader2 className="animate-spin mr-2" size={16} />
@@ -183,15 +183,15 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
             </button>
           </div>
 
-          <div className="grid grid-cols-7 gap-0.5 mb-1">
+          <div className="grid grid-cols-7 gap-1 mb-1">
             {WEEKDAYS.map((day) => (
-              <div key={day} className="text-center text-[10px] font-medium text-gray-400 py-0.5">
+              <div key={day} className="text-center text-[11px] font-medium text-gray-400 py-0.5">
                 {day}
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-0.5">
+          <div className="grid grid-cols-7 gap-1">
             {days.map((date, index) => {
               if (!date) return <div key={`blank-${index}`} />;
 
@@ -210,7 +210,7 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
                   onClick={() => !disabled && handleDayClick(key)}
                   disabled={disabled}
                   className={`
-                    aspect-square flex items-center justify-center text-xs rounded-md transition-all
+                    aspect-square flex items-center justify-center text-sm rounded-md transition-all
                     ${disabled ? 'text-gray-300 cursor-not-allowed' : 'cursor-pointer'}
                     ${blocked && !past ? 'bg-red-50 text-red-300' : ''}
                     ${!disabled && !isEndpoint && !inRange ? 'hover:bg-whatsapp-light/30 text-luxury-dark' : ''}
