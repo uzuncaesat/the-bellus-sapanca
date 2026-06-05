@@ -112,26 +112,6 @@ export default function VillaDetailPage({ params }: VillaDetailPageProps) {
                   <FeatureGrid features={villa.features} />
                 </div>
 
-                {/* Bed Layout */}
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-luxury-dark mb-6">Yatak Düzeni</h2>
-                  <div className="bg-beige-50 border border-beige-200 rounded-lg p-6">
-                    <ul className="space-y-4">
-                      {villa.bedLayout.map((bed, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <div className="bg-white p-2 rounded-lg">
-                            <Bed size={20} className="text-whatsapp" />
-                          </div>
-                          <div>
-                            <p className="font-semibold text-luxury-dark">{bed.floor}</p>
-                            <p className="text-gray-600">{bed.beds}</p>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
                 {/* Availability */}
                 <div className="mb-8">
                   <h2 className="text-3xl font-bold text-luxury-dark mb-6">Müsaitlik</h2>

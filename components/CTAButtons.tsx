@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 interface CTAButtonsProps {
-  variant?: 'default' | 'outline';
+  variant?: 'default' | 'outline' | 'onColor';
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -26,6 +26,10 @@ export default function CTAButtons({ variant = 'default', size = 'md' }: CTAButt
     outline: {
       whatsapp: 'border-2 border-whatsapp text-whatsapp hover:bg-whatsapp hover:text-white',
       phone: 'border-2 border-luxury-dark text-luxury-dark hover:bg-luxury-dark hover:text-white',
+    },
+    onColor: {
+      whatsapp: 'bg-white text-whatsapp hover:bg-green-50',
+      phone: 'border-2 border-white text-white hover:bg-white hover:text-whatsapp',
     },
   };
 

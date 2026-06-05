@@ -217,7 +217,9 @@ export default function HomePage() {
               <p className="text-xl mb-8 text-green-50">
                 Bizimle iletişime geçin, size özel fiyat teklifi hazırlayalım
               </p>
-              <CTAButtons variant="outline" size="lg" />
+              <div className="flex justify-center">
+                <CTAButtons variant="onColor" size="lg" />
+              </div>
             </motion.div>
           </div>
         </section>

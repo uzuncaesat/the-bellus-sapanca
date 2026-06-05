@@ -39,10 +39,10 @@ export default function BookingChoice({
       : listingUrl;
 
   return (
-    <div className="mt-6 pt-6 border-t border-gray-200">
+    <div className="mt-4 pt-4 border-t border-gray-200">
       {hasRange ? (
-        <div className="flex items-center justify-between mb-4 bg-luxury-gray rounded-lg p-3">
-          <div className="text-sm">
+        <div className="flex items-center justify-between mb-3 bg-luxury-gray rounded-lg p-2.5">
+          <div className="text-xs">
             <p className="font-semibold text-luxury-dark">
               {formatDateTr(checkIn!)} - {formatDateTr(checkOut!)}
             </p>
@@ -51,26 +51,26 @@ export default function BookingChoice({
           <button
             onClick={onClear}
             aria-label="Seçimi temizle"
-            className="p-1.5 rounded-lg hover:bg-white text-gray-400 hover:text-luxury-dark transition-colors"
+            className="p-1 rounded-lg hover:bg-white text-gray-400 hover:text-luxury-dark transition-colors"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
       ) : (
-        <p className="text-sm text-gray-500 mb-4">
-          Giriş ve çıkış tarihlerini seçerek rezervasyon seçeneklerini görüntüleyin.
+        <p className="text-xs text-gray-500 mb-3">
+          Giriş ve çıkış tarihlerini seçin.
         </p>
       )}
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         {airbnbUrl && (
           <motion.a
             href={airbnbUrl}
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ scale: 1.02, y: -2 }}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="px-6 py-3 rounded-xl font-semibold bg-[#FF385C] hover:bg-[#E0314F] text-white shadow-lg hover:shadow-xl flex items-center justify-center gap-2 transition-all duration-300"
+            className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-[#FF385C] hover:bg-[#E0314F] text-white shadow-sm flex items-center justify-center gap-2 transition-all duration-300"
           >
             Airbnb'de Rezervasyon Yap
           </motion.a>
@@ -80,11 +80,11 @@ export default function BookingChoice({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          whileHover={{ scale: 1.02, y: -2 }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="px-6 py-3 rounded-xl font-semibold bg-whatsapp hover:bg-whatsapp-hover text-white shadow-lg hover:shadow-xl flex items-center justify-center gap-2 transition-all duration-300"
+          className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-whatsapp hover:bg-whatsapp-hover text-white shadow-sm flex items-center justify-center gap-2 transition-all duration-300"
         >
-          <MessageCircle size={20} />
+          <MessageCircle size={16} />
           WhatsApp'tan Bilgi Al
         </motion.a>
       </div>
