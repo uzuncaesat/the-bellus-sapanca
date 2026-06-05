@@ -12,6 +12,7 @@ import FeatureGrid from '@/components/FeatureGrid';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import BackToTop from '@/components/BackToTop';
 import GoogleMap from '@/components/GoogleMap';
+import AvailabilityCalendar from '@/components/AvailabilityCalendar';
 import { BRAND_NAME } from '@/lib/constants';
 
 interface VillaDetailPageProps {
@@ -129,6 +130,12 @@ export default function VillaDetailPage({ params }: VillaDetailPageProps) {
                       ))}
                     </ul>
                   </div>
+                </div>
+
+                {/* Availability */}
+                <div className="mb-8">
+                  <h2 className="text-3xl font-bold text-luxury-dark mb-6">Müsaitlik</h2>
+                  <AvailabilityCalendar villaId={villa.id} villaName={villa.name} />
                 </div>
 
                 {/* Location */}

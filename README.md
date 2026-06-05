@@ -11,6 +11,7 @@ Modern, lüks ve responsive villa showcase websitesi. Next.js App Router, TypeSc
 - ✅ Modern animasyonlar (Framer Motion)
 - ✅ Görsel galeri (lightbox özellikli)
 - ✅ İletişim formu (WhatsApp'a yönlendirme)
+- ✅ Airbnb takvim entegrasyonu (her villa için müsaitlik takvimi)
 - ✅ Türkçe dil desteği
 
 ## 📋 Gereksinimler
@@ -40,6 +41,7 @@ npm run dev
 │   ├── layout.tsx         # Root layout ve SEO metadata
 │   ├── page.tsx           # Ana sayfa
 │   ├── villa/[id]/        # Villa detay sayfaları
+│   ├── api/calendar/[id]/ # Airbnb iCal takvim API'si
 │   ├── iletisim/          # İletişim sayfası
 │   └── globals.css         # Global stiller
 ├── components/             # React bileşenleri
@@ -50,10 +52,14 @@ npm run dev
 │   ├── FeatureGrid.tsx
 │   ├── ImageGallery.tsx
 │   ├── InfoBox.tsx
+│   ├── AvailabilityCalendar.tsx  # Airbnb müsaitlik takvimi
+│   ├── BookingChoice.tsx         # Airbnb + WhatsApp seçim butonları
 │   └── VillaCard.tsx
 ├── lib/                    # Yardımcı fonksiyonlar ve veriler
 │   ├── constants.ts        # Sabitler (WhatsApp numarası, vb.)
 │   ├── whatsapp.ts         # WhatsApp helper fonksiyonları
+│   ├── airbnb-config.ts    # Airbnb iCal/ilan env yapılandırması
+│   ├── calendar-utils.ts   # Tarih/takvim yardımcıları
 │   └── villa-data.ts       # Villa verileri
 └── public/
     └── images/             # Görseller
@@ -129,6 +135,51 @@ colors: {
   },
 }
 ```
+
+## 📅 Airbnb Takvim Entegrasyonu
+
+Her villanın müsaitlik takvimi, ilgili Airbnb ilanının iCal export linki okunarak gösterilir. Ziyaretçi takvimden tarih seçtikten sonra **Airbnb'de rezervasyon** veya **WhatsApp'tan bilgi al** seçeneklerinden birini kullanır.
+
+### Nasıl çalışır
+
+- `app/api/calendar/[id]/route.ts` → villaya ait iCal'i çeker, parse eder, dolu günleri döner (5 dakika cache)
+- `components/AvailabilityCalendar.tsx` → takvim arayüzü, tarih aralığı seçimi (min. 2 gece)
+- `components/BookingChoice.tsx` → Airbnb + WhatsApp butonları
+- `lib/airbnb-config.ts` → env değişkenlerinden iCal ve ilan URL'lerini okur
+
+### Ortam değişkenleri (Environment Variables)
+
+Linkler koda yazılmaz; **Vercel** panelinde ve yerel `.env.local` dosyasında tutulur (`.env.local` git'e gönderilmez).
+
+| Değişken | Açıklama |
+|----------|----------|
+| `AIRBNB_ICAL_URL_VILLA_1` | Villa 1 Airbnb takvim export linki (`.ics`) |
+| `AIRBNB_ICAL_URL_VILLA_2` | Villa 2 iCal linki |
+| `AIRBNB_ICAL_URL_VILLA_3` | Villa 3 iCal linki |
+| `AIRBNB_LISTING_URL_VILLA_1` | Villa 1 Airbnb ilan linki (`rooms/...`) |
+| `AIRBNB_LISTING_URL_VILLA_2` | Villa 2 ilan linki |
+| `AIRBNB_LISTING_URL_VILLA_3` | Villa 3 ilan linki |
+
+**Vercel:** Settings → Environment Variables → değişkenleri ekle (Production seçili) → Redeploy.
+
+**Yerel geliştirme:** Proje kökünde `.env.local` oluştur, aynı 6 satırı ekle.
+
+### iCal takvim linki nasıl alınır?
+
+Müşteri bilgisayardan, Airbnb host hesabıyla:
+
+1. Airbnb → **Ev sahipliği yap** → **Takvim**
+2. İlgili villayı (ilanı) seç
+3. **Müsaitlik** (Availability) sekmesi
+4. Aşağı kaydır → **Takvimleri bağla** → **Başka bir web sitesine bağla**
+5. **Airbnb takvim linkini kopyala** (`.ics` içeren uzun link)
+6. Her villa için ayrı ayrı tekrarla
+
+> Not: iCal linkleri gizli sayılır (token içerir). Herkese açık paylaşılmamalı, sadece env değişkenlerinde saklanmalı.
+
+### Link değişirse / yeni ilan eklenirse
+
+Sadece ilgili env değişkenini Vercel'de güncelle ve yeniden deploy et — kod değişikliği gerekmez. iCal genelde 1–6 saatte bir güncellenir, sitede ~5 dakika cache vardır.
 
 ## 🚢 Deploy
 

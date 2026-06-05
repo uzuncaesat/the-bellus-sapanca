@@ -50,3 +50,29 @@ export function createWhatsAppMessageFromForm(data: {
   
   return message;
 }
+
+/**
+ * Takvimden seçilen tarihler için WhatsApp mesajı oluşturur
+ */
+export function createWhatsAppMessageForBooking(data: {
+  villaName: string;
+  checkIn?: string;
+  checkOut?: string;
+  nights?: number;
+}): string {
+  let message = `Merhaba, ${data.villaName} için rezervasyon yapmak istiyorum.\n\n`;
+
+  if (data.checkIn && data.checkOut) {
+    message += `Giriş: ${data.checkIn}\n`;
+    message += `Çıkış: ${data.checkOut}\n`;
+    if (data.nights) {
+      message += `Gece sayısı: ${data.nights}\n`;
+    }
+  } else {
+    message += 'Konaklama tarihleri:\n';
+  }
+
+  message += '\nBu tarihler için uygunluk ve fiyat bilgisi alabilir miyim?';
+
+  return message;
+}
