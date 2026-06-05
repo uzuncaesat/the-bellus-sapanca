@@ -143,55 +143,57 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 max-w-lg">
+    <div className="bg-white border border-gray-100 rounded-2xl shadow-medium p-6 sm:p-7 max-w-xl">
       {loading ? (
-        <div className="flex items-center justify-center py-12 text-gray-400 text-sm">
-          <Loader2 className="animate-spin mr-2" size={16} />
-          Yükleniyor...
+        <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
+          <Loader2 className="animate-spin mr-2" size={18} />
+          Takvim yükleniyor...
         </div>
       ) : (
         <>
           {source === 'unavailable' && (
-            <div className="flex items-start gap-2 bg-beige-50 border border-beige-200 text-luxury-dark rounded-lg p-2.5 mb-3 text-xs">
-              <AlertCircle size={14} className="text-whatsapp mt-0.5 shrink-0" />
+            <div className="flex items-start gap-2 bg-beige-50 border border-beige-200 text-luxury-dark rounded-xl p-3 mb-5 text-xs">
+              <AlertCircle size={15} className="text-whatsapp mt-0.5 shrink-0" />
               <span>
                 Takvim güncellenemedi. Güncel müsaitlik için WhatsApp ile iletişime geçin.
               </span>
             </div>
           )}
 
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-5">
             <button
               onClick={handlePrev}
               disabled={!canGoPrev}
               aria-label="Önceki ay"
-              className={`p-1.5 rounded-lg transition-colors ${
-                canGoPrev ? 'hover:bg-luxury-gray text-luxury-dark' : 'text-gray-300 cursor-not-allowed'
+              className={`h-9 w-9 flex items-center justify-center rounded-full border transition-colors ${
+                canGoPrev
+                  ? 'border-gray-200 hover:border-luxury-dark text-luxury-dark'
+                  : 'border-gray-100 text-gray-300 cursor-not-allowed'
               }`}
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={18} />
             </button>
-            <span className="text-sm font-semibold text-luxury-dark">
+            <span className="text-lg font-semibold text-luxury-dark tracking-tight">
               {MONTHS[viewDate.getMonth()]} {viewDate.getFullYear()}
             </span>
             <button
               onClick={handleNext}
               aria-label="Sonraki ay"
-              className="p-1.5 rounded-lg hover:bg-luxury-gray text-luxury-dark transition-colors"
+              className="h-9 w-9 flex items-center justify-center rounded-full border border-gray-200 hover:border-luxury-dark text-luxury-dark transition-colors"
             >
-              <ChevronRight size={16} />
+              <ChevronRight size={18} />
             </button>
           </div>
 
-          <div className="grid grid-cols-7 gap-1 mb-1">
+          <div className="grid grid-cols-7 mb-2">
             {WEEKDAYS.map((day) => (
-              <div key={day} className="text-center text-[11px] font-medium text-gray-400 py-0.5">
+              <div key={day} className="text-center text-xs font-medium text-gray-400 py-1">
                 {day}
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-y-1">
             {days.map((date, index) => {
               if (!date) return <div key={`blank-${index}`} />;
 
@@ -199,40 +201,51 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
               const past = isPast(date);
               const blocked = isBlocked(key);
               const disabled = past || blocked;
+              const isToday = key === toDateKey(today);
               const isCheckIn = key === checkIn;
               const isCheckOut = key === checkOut;
               const inRange = isInRange(key);
               const isEndpoint = isCheckIn || isCheckOut;
+              const rangeStart = isCheckIn && Boolean(checkOut);
+              const rangeEnd = isCheckOut;
 
               return (
-                <button
+                <div
                   key={key}
-                  onClick={() => !disabled && handleDayClick(key)}
-                  disabled={disabled}
-                  className={`
-                    aspect-square flex items-center justify-center text-sm rounded-md transition-all
-                    ${disabled ? 'text-gray-300 cursor-not-allowed' : 'cursor-pointer'}
-                    ${blocked && !past ? 'bg-red-50 text-red-300' : ''}
-                    ${!disabled && !isEndpoint && !inRange ? 'hover:bg-whatsapp-light/30 text-luxury-dark' : ''}
-                    ${inRange ? 'bg-whatsapp-light/30 text-luxury-dark' : ''}
-                    ${isEndpoint ? 'bg-whatsapp text-white font-semibold' : ''}
+                  className={`relative h-11 flex items-center justify-center
+                    ${inRange ? 'bg-whatsapp/10' : ''}
+                    ${rangeStart ? 'bg-whatsapp/10 rounded-l-full' : ''}
+                    ${rangeEnd ? 'bg-whatsapp/10 rounded-r-full' : ''}
                   `}
                 >
-                  {date.getDate()}
-                </button>
+                  <button
+                    onClick={() => !disabled && handleDayClick(key)}
+                    disabled={disabled}
+                    className={`relative z-10 h-10 w-10 flex items-center justify-center text-sm rounded-full transition-all
+                      ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
+                      ${past ? 'text-gray-200' : ''}
+                      ${blocked && !past ? 'text-gray-300 line-through decoration-gray-300' : ''}
+                      ${!disabled && !isEndpoint ? 'text-luxury-dark hover:bg-gray-100' : ''}
+                      ${isEndpoint ? 'bg-whatsapp text-white font-semibold shadow-sm' : ''}
+                      ${isToday && !isEndpoint && !disabled ? 'ring-1 ring-inset ring-whatsapp/40' : ''}
+                    `}
+                  >
+                    {date.getDate()}
+                  </button>
+                </div>
               );
             })}
           </div>
 
-          <div className="flex items-center gap-3 mt-3 text-[10px] text-gray-500">
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-sm bg-white border border-gray-300" /> Müsait
+          <div className="flex items-center gap-4 mt-5 pt-4 border-t border-gray-100 text-xs text-gray-500">
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full border border-gray-300" /> Müsait
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-sm bg-red-50 border border-red-200" /> Dolu
+            <span className="flex items-center gap-1.5">
+              <span className="text-gray-300 line-through decoration-gray-300">00</span> Dolu
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-sm bg-whatsapp" /> Seçili
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-whatsapp" /> Seçili
             </span>
           </div>
 
