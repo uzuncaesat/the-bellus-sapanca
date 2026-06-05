@@ -25,7 +25,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/', label: 'Ana Sayfa' },
-    { href: '/villa/villa-1', label: 'Villalar' },
+    { href: '/#villalar', label: 'Villalar' },
     { href: '/iletisim', label: 'İletişim' },
   ];
 

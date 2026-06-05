@@ -26,7 +26,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/villa/villa-1" className="text-gray-600 hover:text-whatsapp transition-colors">
+                <Link href="/#villalar" className="text-gray-600 hover:text-whatsapp transition-colors">
                   Villalar
                 </Link>
               </li>

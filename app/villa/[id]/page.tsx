@@ -57,7 +57,7 @@ export default function VillaDetailPage({ params }: VillaDetailPageProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Breadcrumbs
               items={[
-                { label: 'Villalar', href: '/villa/villa-1' },
+                { label: 'Villalar', href: '/#villalar' },
                 { label: villa.name },
               ]}
             />
