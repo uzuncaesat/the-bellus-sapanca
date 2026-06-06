@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import ical from 'node-ical';
 import { getAirbnbConfig, isVillaId } from '@/lib/airbnb-config';
-import { expandDateRange, toDateKey } from '@/lib/calendar-utils';
+import { fetchBlockedDates } from '@/lib/airbnb-calendar';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -42,46 +41,7 @@ export async function GET(
   }
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-
-    let res: Response;
-    try {
-      res = await fetch(config.icalUrl, {
-        next: { revalidate },
-        headers: { 'User-Agent': 'TheBellusSapanca/1.0 (+calendar-sync)' },
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timeout);
-    }
-
-    if (!res.ok) {
-      throw new Error(`iCal fetch failed: ${res.status}`);
-    }
-
-    const icsText = await res.text();
-    const parsed = ical.sync.parseICS(icsText);
-
-    const blocked = new Set<string>();
-
-    for (const key of Object.keys(parsed)) {
-      const event = parsed[key];
-      if (!event || event.type !== 'VEVENT') continue;
-      if (!event.start || !event.end) continue;
-
-      const start = new Date(event.start as unknown as string);
-      const end = new Date(event.end as unknown as string);
-
-      for (const day of expandDateRange(start, end)) {
-        blocked.add(day);
-      }
-    }
-
-    const today = toDateKey(new Date());
-    const blockedDates = Array.from(blocked)
-      .filter((d) => d >= today)
-      .sort();
+    const blockedDates = await fetchBlockedDates(config.icalUrl);
 
     const payload: CalendarResponse = {
       blockedDates,

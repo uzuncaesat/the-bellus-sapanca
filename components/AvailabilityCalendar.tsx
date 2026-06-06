@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react';
 import {
   toDateKey,
   daysBetween,
@@ -12,16 +11,10 @@ import {
 import BookingChoice from './BookingChoice';
 
 interface AvailabilityCalendarProps {
-  villaId: string;
   villaName: string;
   listingUrl?: string | null;
-}
-
-interface CalendarApiResponse {
-  blockedDates: string[];
-  lastSynced: string;
-  source: 'airbnb' | 'unavailable';
-  listingUrl: string | null;
+  initialBlockedDates?: string[];
+  available?: boolean;
 }
 
 const WEEKDAYS = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
@@ -33,48 +26,24 @@ const MONTHS = [
 const MIN_NIGHTS = 2;
 
 export default function AvailabilityCalendar({
-  villaId,
   villaName,
-  listingUrl: initialListingUrl = null,
+  listingUrl = null,
+  initialBlockedDates = [],
+  available = false,
 }: AvailabilityCalendarProps) {
   const today = useMemo(() => {
     const d = new Date();
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   }, []);
 
+  const blockedSet = useMemo(() => new Set(initialBlockedDates), [initialBlockedDates]);
+
   const [viewDate, setViewDate] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
-  const [blockedSet, setBlockedSet] = useState<Set<string>>(new Set());
-  const [loading, setLoading] = useState(true);
-  const [source, setSource] = useState<'airbnb' | 'unavailable'>('airbnb');
-  const [listingUrl, setListingUrl] = useState<string | null>(initialListingUrl);
   const [checkIn, setCheckIn] = useState<string | null>(null);
   const [checkOut, setCheckOut] = useState<string | null>(null);
   const [rangeError, setRangeError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let active = true;
-    setLoading(true);
-
-    fetch(`/api/calendar/${villaId}`)
-      .then((res) => res.json())
-      .then((data: CalendarApiResponse) => {
-        if (!active) return;
-        setBlockedSet(new Set(data.blockedDates ?? []));
-        setSource(data.source ?? 'unavailable');
-        setListingUrl(data.listingUrl ?? initialListingUrl);
-      })
-      .catch(() => {
-        if (!active) return;
-        setSource('unavailable');
-      })
-      .finally(() => {
-        if (active) setLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [villaId, initialListingUrl]);
+  const source: 'airbnb' | 'unavailable' = available ? 'airbnb' : 'unavailable';
 
   const monthStart = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
   const monthEnd = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0);
@@ -149,13 +118,6 @@ export default function AvailabilityCalendar({
 
   return (
     <div className="bg-white border border-gray-100 rounded-2xl shadow-medium p-6 sm:p-7 max-w-xl">
-      {loading ? (
-        <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
-          <Loader2 className="animate-spin mr-2" size={18} />
-          Takvim yükleniyor...
-        </div>
-      ) : (
-        <>
           {source === 'unavailable' && (
             <div className="flex items-start gap-2 bg-beige-50 border border-beige-200 text-luxury-dark rounded-xl p-3 mb-5 text-xs">
               <AlertCircle size={15} className="text-whatsapp mt-0.5 shrink-0" />
@@ -266,8 +228,6 @@ export default function AvailabilityCalendar({
             nights={nights}
             onClear={clearSelection}
           />
-        </>
-      )}
     </div>
   );
 }

@@ -13,7 +13,8 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import BackToTop from '@/components/BackToTop';
 import GoogleMap from '@/components/GoogleMap';
 import AvailabilityCalendar from '@/components/AvailabilityCalendar';
-import { getAirbnbListingUrl } from '@/lib/airbnb-config';
+import { getAirbnbConfig } from '@/lib/airbnb-config';
+import { fetchBlockedDates } from '@/lib/airbnb-calendar';
 import { BRAND_NAME } from '@/lib/constants';
 
 interface VillaDetailPageProps {
@@ -42,14 +43,26 @@ export async function generateMetadata({ params }: VillaDetailPageProps) {
   };
 }
 
-export default function VillaDetailPage({ params }: VillaDetailPageProps) {
+export default async function VillaDetailPage({ params }: VillaDetailPageProps) {
   const villa = getVillaById(params.id);
 
   if (!villa) {
     notFound();
   }
 
-  const listingUrl = getAirbnbListingUrl(villa.id);
+  const config = getAirbnbConfig(villa.id);
+  const listingUrl = config?.listingUrl ?? null;
+  let initialBlockedDates: string[] = [];
+  let calendarAvailable = false;
+
+  if (config) {
+    try {
+      initialBlockedDates = await fetchBlockedDates(config.icalUrl);
+      calendarAvailable = true;
+    } catch {
+      calendarAvailable = false;
+    }
+  }
 
   return (
     <>
@@ -119,9 +132,10 @@ export default function VillaDetailPage({ params }: VillaDetailPageProps) {
                 <div className="mb-8">
                   <h2 className="text-3xl font-bold text-luxury-dark mb-6">Müsaitlik</h2>
                   <AvailabilityCalendar
-                    villaId={villa.id}
                     villaName={villa.name}
                     listingUrl={listingUrl}
+                    initialBlockedDates={initialBlockedDates}
+                    available={calendarAvailable}
                   />
                 </div>
 
