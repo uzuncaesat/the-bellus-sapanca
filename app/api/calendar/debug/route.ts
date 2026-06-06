@@ -26,8 +26,17 @@ export async function GET() {
     .filter((k) => k.toUpperCase().includes('AIRBNB'))
     .sort();
 
+  const allKeys = Object.keys(process.env);
+  const vercelKeys = allKeys.filter((k) => k.startsWith('VERCEL')).sort();
+
   return NextResponse.json(
     {
+      marker: 'debug-v2',
+      vercelEnv: process.env.VERCEL_ENV ?? null,
+      commitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+      region: process.env.VERCEL_REGION ?? null,
+      totalEnvKeyCount: allKeys.length,
+      vercelSystemKeys: vercelKeys,
       expected,
       airbnbKeysFoundInRuntime: airbnbKeys,
     },
