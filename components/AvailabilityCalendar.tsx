@@ -14,6 +14,7 @@ import BookingChoice from './BookingChoice';
 interface AvailabilityCalendarProps {
   villaId: string;
   villaName: string;
+  listingUrl?: string | null;
 }
 
 interface CalendarApiResponse {
@@ -31,7 +32,11 @@ const MONTHS = [
 
 const MIN_NIGHTS = 2;
 
-export default function AvailabilityCalendar({ villaId, villaName }: AvailabilityCalendarProps) {
+export default function AvailabilityCalendar({
+  villaId,
+  villaName,
+  listingUrl: initialListingUrl = null,
+}: AvailabilityCalendarProps) {
   const today = useMemo(() => {
     const d = new Date();
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -41,7 +46,7 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
   const [blockedSet, setBlockedSet] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [source, setSource] = useState<'airbnb' | 'unavailable'>('airbnb');
-  const [listingUrl, setListingUrl] = useState<string | null>(null);
+  const [listingUrl, setListingUrl] = useState<string | null>(initialListingUrl);
   const [checkIn, setCheckIn] = useState<string | null>(null);
   const [checkOut, setCheckOut] = useState<string | null>(null);
   const [rangeError, setRangeError] = useState<string | null>(null);
@@ -56,7 +61,7 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
         if (!active) return;
         setBlockedSet(new Set(data.blockedDates ?? []));
         setSource(data.source ?? 'unavailable');
-        setListingUrl(data.listingUrl ?? null);
+        setListingUrl(data.listingUrl ?? initialListingUrl);
       })
       .catch(() => {
         if (!active) return;
@@ -69,7 +74,7 @@ export default function AvailabilityCalendar({ villaId, villaName }: Availabilit
     return () => {
       active = false;
     };
-  }, [villaId]);
+  }, [villaId, initialListingUrl]);
 
   const monthStart = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
   const monthEnd = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0);

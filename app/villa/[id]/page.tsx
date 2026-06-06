@@ -13,6 +13,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import BackToTop from '@/components/BackToTop';
 import GoogleMap from '@/components/GoogleMap';
 import AvailabilityCalendar from '@/components/AvailabilityCalendar';
+import { getAirbnbListingUrl } from '@/lib/airbnb-config';
 import { BRAND_NAME } from '@/lib/constants';
 
 interface VillaDetailPageProps {
@@ -47,6 +48,8 @@ export default function VillaDetailPage({ params }: VillaDetailPageProps) {
   if (!villa) {
     notFound();
   }
+
+  const listingUrl = getAirbnbListingUrl(villa.id);
 
   return (
     <>
@@ -115,7 +118,11 @@ export default function VillaDetailPage({ params }: VillaDetailPageProps) {
                 {/* Availability */}
                 <div className="mb-8">
                   <h2 className="text-3xl font-bold text-luxury-dark mb-6">Müsaitlik</h2>
-                  <AvailabilityCalendar villaId={villa.id} villaName={villa.name} />
+                  <AvailabilityCalendar
+                    villaId={villa.id}
+                    villaName={villa.name}
+                    listingUrl={listingUrl}
+                  />
                 </div>
 
                 {/* Location */}

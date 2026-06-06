@@ -42,10 +42,19 @@ export async function GET(
   }
 
   try {
-    const res = await fetch(config.icalUrl, {
-      next: { revalidate },
-      headers: { 'User-Agent': 'TheBellusSapanca/1.0 (+calendar-sync)' },
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
+    let res: Response;
+    try {
+      res = await fetch(config.icalUrl, {
+        next: { revalidate },
+        headers: { 'User-Agent': 'TheBellusSapanca/1.0 (+calendar-sync)' },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
 
     if (!res.ok) {
       throw new Error(`iCal fetch failed: ${res.status}`);
