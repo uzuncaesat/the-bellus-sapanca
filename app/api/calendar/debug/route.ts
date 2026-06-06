@@ -31,8 +31,11 @@ export async function GET() {
 
   return NextResponse.json(
     {
-      marker: 'debug-v2',
+      marker: 'debug-v3',
       vercelEnv: process.env.VERCEL_ENV ?? null,
+      projectName: process.env.VERCEL_PROJECT_NAME ?? null,
+      repoOwner: process.env.VERCEL_GIT_REPO_OWNER ?? null,
+      repoSlug: process.env.VERCEL_GIT_REPO_SLUG ?? null,
       commitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
       region: process.env.VERCEL_REGION ?? null,
       totalEnvKeyCount: allKeys.length,
